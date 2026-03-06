@@ -155,11 +155,11 @@ const Transverter: React.FC<TransverterProps> = ({ theme, setTheme }) => {
     // ─── Render ───────────────────────────────────────────────────────────────
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden">
+        <div className="flex flex-col min-h-[100dvh] lg:h-screen lg:overflow-hidden">
             <TopNav theme={theme} setTheme={setTheme} isApp={true} />
 
-            <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
-                <main className="flex-1 overflow-y-auto bg-primary">
+            <div className="flex flex-col lg:flex-row flex-1 min-h-0 lg:overflow-hidden">
+                <main className="flex-none lg:flex-1 lg:overflow-y-auto bg-primary">
                     <TheVoid
                         onFilesSelect={handleFilesSelect}
                         isDragging={isDragging}
@@ -204,9 +204,10 @@ const Transverter: React.FC<TransverterProps> = ({ theme, setTheme }) => {
                                                 <a
                                                     href={p.url}
                                                     download={`${baseName}.${p.format}`}
-                                                    className="block text-center py-1.5 bg-neon text-black mono text-[10px] font-black uppercase hover:scale-105 active:scale-95 transition-transform"
+                                                    className="flex items-center justify-center min-h-[36px] py-1.5 bg-neon text-black mono text-[10px] font-black uppercase hover:scale-105 active:scale-95 transition-transform"
                                                 >
-                                                    ↓ DOWNLOAD .{p.format.toUpperCase()}
+                                                    <span className="hidden sm:inline">↓ DOWNLOAD .{p.format.toUpperCase()}</span>
+                                                    <span className="sm:hidden">↓ DL .{p.format.toUpperCase()}</span>
                                                 </a>
                                             </div>
                                         </div>

@@ -9,9 +9,9 @@ interface TopNavProps {
 
 const TopNav: React.FC<TopNavProps> = ({ theme, setTheme, onLaunchApp, isApp = true }) => {
     return (
-        <nav className="h-16 brutalist-border flex items-center justify-between px-6 bg-secondary sticky top-0 z-50">
-            <div className="flex items-center gap-8">
-                <h1 className="mono font-bold tracking-tighter text-xl cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <nav className="h-16 brutalist-border flex items-center justify-between px-4 md:px-6 bg-secondary sticky top-0 z-50">
+            <div className="flex items-center gap-4 md:gap-8">
+                <h1 className="mono font-bold tracking-tighter text-lg md:text-xl cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     [TRANSVERT // <span className="neon-text">v2.0</span>]
                 </h1>
 

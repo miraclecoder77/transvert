@@ -36,7 +36,7 @@ const TheVoid: React.FC<TheVoidProps> = ({ onFilesSelect, isDragging, setIsDragg
     };
 
     return (
-        <div className="p-8">
+        <div className="p-4 md:p-8">
             <h2 className="mono font-bold uppercase tracking-widest text-sm mb-4">DASHBOARD</h2>
 
             <div
@@ -49,8 +49,8 @@ const TheVoid: React.FC<TheVoidProps> = ({ onFilesSelect, isDragging, setIsDragg
                 <div className="scanline" />
 
                 <div className="flex flex-col items-center text-center px-4 relative z-10 gap-3">
-                    <h3 className="mono text-4xl font-extrabold tracking-[0.2em]">THE VOID</h3>
-                    <div className="mono text-lg flex items-center gap-3">
+                    <h3 className="mono text-2xl md:text-4xl font-extrabold tracking-[0.2em] md:tracking-[0.2em]">THE VOID</h3>
+                    <div className="mono text-sm md:text-lg flex items-center gap-3">
                         <span className="text-[#666]">&gt;</span>
                         <span className="font-bold">[ DROP FILES TO DECENTRALIZE ]</span>
                         <span className="text-[#666]">&lt;</span>

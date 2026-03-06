@@ -68,8 +68,8 @@ const ProcessingQueue: React.FC<ProcessingQueueProps> = ({
             </div>
 
             <div className="brutalist-card overflow-hidden">
-                {/* Header */}
-                <div className="grid grid-cols-12 gap-2 p-3 bg-neutral-100 dark:bg-neutral-800 mono text-[9px] font-bold uppercase tracking-widest text-[#666]">
+                {/* Header - Hidden on mobile */}
+                <div className="hidden md:grid md:grid-cols-12 gap-2 p-3 bg-neutral-100 dark:bg-neutral-800 mono text-[10px] font-bold uppercase tracking-widest text-[#666]">
                     <div className="col-span-3">File</div>
                     <div className="col-span-2">Format</div>
                     <div className="col-span-2">Quality</div>
@@ -86,93 +86,100 @@ const ProcessingQueue: React.FC<ProcessingQueueProps> = ({
                     queue.map((item) => {
                         const formatOptions = getFormatOptions(item.fileKind);
                         return (
-                            <div key={item.id} className="grid grid-cols-12 gap-2 items-center p-4 brutalist-border-t group">
+                            <div key={item.id} className="flex flex-col md:grid md:grid-cols-12 gap-4 md:gap-2 md:items-center p-4 brutalist-border-t group relative">
 
                                 {/* File Info */}
-                                <div className="col-span-3 flex flex-col gap-1 overflow-hidden">
+                                <div className="w-full md:col-span-3 flex flex-col gap-1 overflow-hidden pr-8 md:pr-0">
                                     <div className="flex items-center gap-2">
                                         <span className="text-base">{getKindIcon(item.fileKind)}</span>
-                                        <span className="mono text-xs truncate font-medium" title={item.file.name}>
+                                        <span className="mono text-xs md:text-[11px] truncate font-medium" title={item.file.name}>
                                             {item.file.name}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className={`mono text-[9px] font-bold ${STATUS_COLORS[item.status]}`}>
+                                        <span className={`mono text-[10px] md:text-[9px] font-bold ${STATUS_COLORS[item.status]}`}>
                                             {STATUS_LABEL[item.status]}
                                         </span>
                                         {item.status === 'processing' && item.eta && (
-                                            <span className="mono text-[9px] text-[#666]">{item.eta}</span>
+                                            <span className="mono text-[10px] md:text-[9px] text-[#666]">{item.eta}</span>
                                         )}
-                                        <span className="mono text-[9px] text-[#444]">
+                                        <span className="mono text-[10px] md:text-[9px] text-[#444]">
                                             {formatBytes(item.file.size)}
                                         </span>
                                     </div>
                                     {item.error && (
-                                        <span className="mono text-[9px] text-red-400 truncate">{item.error}</span>
+                                        <span className="mono text-[10px] md:text-[9px] text-red-400 truncate">{item.error}</span>
                                     )}
                                 </div>
 
-                                {/* Format Selector */}
-                                <div className="col-span-2">
-                                    <select
-                                        value={item.outputFormat}
-                                        onChange={(e) => onFormatChange(item.id, e.target.value)}
-                                        disabled={item.status === 'processing' || item.status === 'done'}
-                                        className="w-full bg-transparent mono text-xs p-1.5 brutalist-border appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-neon disabled:opacity-40 disabled:cursor-not-allowed"
-                                    >
-                                        {formatOptions.map(fmt => (
-                                            <option key={fmt} value={fmt}>.{fmt}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {/* Quality Slider */}
-                                <div className="col-span-2 flex flex-col gap-1">
-                                    <input
-                                        type="range"
-                                        min={1}
-                                        max={100}
-                                        value={item.quality}
-                                        onChange={(e) => onQualityChange(item.id, Number(e.target.value))}
-                                        disabled={item.status === 'processing' || item.status === 'done'}
-                                        className="w-full accent-[color:var(--color-neon)] disabled:opacity-40 disabled:cursor-not-allowed"
-                                    />
-                                    <span className="mono text-[9px] text-[#666] text-center">{item.quality}%</span>
-                                </div>
-
-                                {/* Strip Metadata Toggle */}
-                                <div className="col-span-2 flex flex-col items-center gap-1">
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <div
-                                            onClick={() => {
-                                                if (item.status !== 'processing' && item.status !== 'done')
-                                                    onMetadataToggle(item.id, !item.stripMetadata);
-                                            }}
-                                            className={`relative w-8 h-4 transition-colors duration-200 cursor-pointer ${item.stripMetadata ? 'bg-neon' : 'bg-neutral-400 dark:bg-neutral-700'} ${item.status === 'processing' || item.status === 'done' ? 'opacity-40 cursor-not-allowed' : ''}`}
+                                {/* Controls Grid (Mobile) / Grid Columns (Desktop) */}
+                                <div className="grid grid-cols-2 gap-4 md:contents">
+                                    {/* Format Selector */}
+                                    <div className="col-span-1 md:col-span-2 flex flex-col gap-1">
+                                        <span className="md:hidden mono text-[10px] uppercase text-[#666]">Format</span>
+                                        <select
+                                            value={item.outputFormat}
+                                            onChange={(e) => onFormatChange(item.id, e.target.value)}
+                                            disabled={item.status === 'processing' || item.status === 'done'}
+                                            className="w-full bg-transparent mono text-xs p-2 md:p-1.5 brutalist-border appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-neon disabled:opacity-40 disabled:cursor-not-allowed"
                                         >
-                                            <div className={`absolute top-0.5 w-3 h-3 bg-black transition-all duration-200 ${item.stripMetadata ? 'left-4' : 'left-0.5'}`} />
-                                        </div>
-                                        <span className="mono text-[9px] text-[#666]">{item.stripMetadata ? 'ON' : 'OFF'}</span>
-                                    </label>
-                                </div>
-
-                                {/* Progress Bar */}
-                                <div className="col-span-2">
-                                    <div className="w-full bg-neutral-200 dark:bg-neutral-800 h-2 overflow-hidden">
-                                        <div
-                                            className={`h-full transition-all duration-300 ${item.status === 'done' ? 'bg-green-400' : item.status === 'error' ? 'bg-red-400' : 'bg-neon'}`}
-                                            style={{ width: `${item.progress}%` }}
-                                        />
+                                            {formatOptions.map(fmt => (
+                                                <option key={fmt} value={fmt}>.{fmt}</option>
+                                            ))}
+                                        </select>
                                     </div>
-                                    <div className="mono text-[9px] text-[#666] mt-0.5 text-right">{item.progress}%</div>
+
+                                    {/* Quality Slider */}
+                                    <div className="col-span-1 md:col-span-2 flex flex-col gap-1 justify-center">
+                                        <span className="md:hidden mono text-[10px] uppercase text-[#666]">Quality</span>
+                                        <input
+                                            type="range"
+                                            min={1}
+                                            max={100}
+                                            value={item.quality}
+                                            onChange={(e) => onQualityChange(item.id, Number(e.target.value))}
+                                            disabled={item.status === 'processing' || item.status === 'done'}
+                                            className="w-full accent-[color:var(--color-neon)] py-2 md:py-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                                        />
+                                        <span className="mono text-[10px] md:text-[9px] text-[#666] text-center">{item.quality}%</span>
+                                    </div>
+
+                                    {/* Strip Metadata Toggle */}
+                                    <div className="col-span-1 md:col-span-2 flex flex-col md:items-center gap-1">
+                                        <span className="md:hidden mono text-[10px] uppercase text-[#666]">Metadata</span>
+                                        <label className="flex items-center gap-2 cursor-pointer h-full py-2 md:py-0">
+                                            <div
+                                                onClick={() => {
+                                                    if (item.status !== 'processing' && item.status !== 'done')
+                                                        onMetadataToggle(item.id, !item.stripMetadata);
+                                                }}
+                                                className={`relative w-10 h-5 md:w-8 md:h-4 transition-colors duration-200 cursor-pointer ${item.stripMetadata ? 'bg-neon' : 'bg-neutral-400 dark:bg-neutral-700'} ${item.status === 'processing' || item.status === 'done' ? 'opacity-40 cursor-not-allowed' : ''}`}
+                                            >
+                                                <div className={`absolute top-[2px] w-4 h-4 md:w-3 md:h-3 bg-black transition-all duration-200 ${item.stripMetadata ? 'left-[22px] md:left-4' : 'left-[2px] md:left-0.5'}`} />
+                                            </div>
+                                            <span className="mono text-[10px] md:text-[9px] text-[#666]">{item.stripMetadata ? 'ON' : 'OFF'}</span>
+                                        </label>
+                                    </div>
+
+                                    {/* Progress Bar */}
+                                    <div className="col-span-1 md:col-span-2 flex flex-col justify-center gap-1">
+                                        <span className="md:hidden mono text-[10px] uppercase text-[#666]">Progress</span>
+                                        <div className="w-full bg-neutral-200 dark:bg-neutral-800 h-3 md:h-2 overflow-hidden mt-1 md:mt-0">
+                                            <div
+                                                className={`h-full transition-all duration-300 ${item.status === 'done' ? 'bg-green-400' : item.status === 'error' ? 'bg-red-400' : 'bg-neon'}`}
+                                                style={{ width: `${item.progress}%` }}
+                                            />
+                                        </div>
+                                        <div className="mono text-[10px] md:text-[9px] text-[#666] mt-0.5 text-right">{item.progress}%</div>
+                                    </div>
                                 </div>
 
                                 {/* Remove button */}
-                                <div className="col-span-1 flex justify-end">
+                                <div className="absolute top-2 right-2 md:relative md:top-auto md:right-auto md:col-span-1 flex justify-end">
                                     <button
                                         onClick={() => onRemove(item.id)}
                                         disabled={item.status === 'processing'}
-                                        className="mono text-xs text-[#666] hover:text-red-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed px-2 py-1"
+                                        className="w-10 h-10 md:w-auto md:h-auto flex items-center justify-center mono text-lg md:text-xs text-[#666] hover:text-red-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed md:px-2 md:py-1"
                                         title="Remove from queue"
                                     >
                                         ✕
