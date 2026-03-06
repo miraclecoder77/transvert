@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import * as Comlink from 'comlink';
 import type { WorkerApi } from '../workers/ffmpeg.worker';
 import type { MagickWorkerApi } from '../workers/magick.worker';

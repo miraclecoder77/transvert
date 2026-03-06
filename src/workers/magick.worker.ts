@@ -34,7 +34,7 @@ const workerApi = {
                 try {
                     image.strip();
                     image.write(MagickFormat.Png, (outputBytes: Uint8Array) => {
-                        resolve(new Blob([outputBytes], { type: 'image/png' }));
+                        resolve(new Blob([outputBytes as unknown as BlobPart], { type: 'image/png' }));
                     });
                 } catch (e) {
                     reject(e);
@@ -73,7 +73,7 @@ const workerApi = {
                         const mimeType = format === 'jpg' || format === 'jpeg'
                             ? 'image/jpeg'
                             : `image/${format.toLowerCase()}`;
-                        resolve(new Blob([outputBytes], { type: mimeType }));
+                        resolve(new Blob([outputBytes as unknown as BlobPart], { type: mimeType }));
                     });
                 } catch (e) {
                     reject(e);

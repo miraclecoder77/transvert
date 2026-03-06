@@ -79,7 +79,7 @@ const workerApi = {
         await ffmpeg.deleteFile(outputName).catch(() => { });
 
         const mimeType = isAudio ? `audio/${outputFormat}` : `video/${outputFormat}`;
-        return new Blob([data as Uint8Array], { type: mimeType });
+        return new Blob([data as unknown as BlobPart], { type: mimeType });
     }
 };
 
