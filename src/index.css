@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-neon: #D4FF00;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+}
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --neon: #D4FF00;
+  --void-bg: #fcfcfc;
+}
+
+[data-theme='dark'] {
+  --bg-primary: #111111;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #999999;
+  --border-color: #333333;
+  --neon: #D4FF00;
+  --void-bg: #141414;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes pulse-neon {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 10px var(--neon);
+  }
+
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 20px var(--neon);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.5s ease-out forwards, slideUp 0.5s ease-out forwards;
+}
+
+.scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(212, 255, 0, 0.1);
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+
+/* Brutalist UI Helpers */
+.brutalist-border {
+  border: 1px solid var(--border-color);
+}
+
+.brutalist-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.neon-text {
+  color: var(--neon);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.void-dropzone {
+  background-color: var(--void-bg);
+  border: 1px solid var(--neon);
+  box-shadow: inset 0 0 20px rgba(212, 255, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.void-dropzone::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 1px,
+      rgba(212, 255, 0, 0.02) 1px,
+      rgba(212, 255, 0, 0.02) 2px);
+  pointer-events: none;
+}
+
+/* Specific component overrides */
+.transverter-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Processing Overlay
+───────────────────────────────────────────────────────────────────────── */
+.processing-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.processing-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: slideUp 0.3s ease-out;
+}
+
+.processing-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.processing-icon {
+  font-size: 28px;
+  line-height: 1;
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+.processing-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--neon);
+  margin: 0 0 4px;
+  line-height: 1;
+}
+
+.processing-status {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Progress bar ───────────────────────────────────────────────────────── */
+.progress-track {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background: var(--border-color);
+  overflow: visible;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--neon);
+  box-shadow: 0 0 8px var(--neon);
+  transition: width 0.3s ease-out;
+}
+
+.progress-pct {
+  position: absolute;
+  right: 0;
+  top: -20px;
+  font-size: 10px;
+  color: var(--neon);
+  letter-spacing: 0.05em;
+}
+
+/* ─── Ad Slot Wrapper ────────────────────────────────────────────────────── */
+.ad-slot-wrapper {
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.ad-slot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.ad-slot-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--neon);
+  text-transform: uppercase;
+}
+
+.ad-slot-note {
+  font-size: 9px;
+  color: var(--text-secondary);
+}
+
+.ad-slot-body {
+  min-height: 140px;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+/* ─── Sponsor card (fallback) ────────────────────────────────────────────── */
+.sponsor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 20px;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition:
+    opacity 0.4s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  animation: fadeIn 0.4s ease;
+}
+
+.sponsor-card:hover {
+  background: var(--bg-secondary);
+  transform: translateY(-1px);
+}
+
+.sponsor-logo {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.sponsor-brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.sponsor-tagline {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sponsor-cta {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+.sponsor-dots {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+  align-self: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.sponsor-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+/* ─── Carbon Ads theme overrides ─────────────────────────────────────────── */
+.carbon-ads-wrapper {
+  padding: 14px;
+  width: 100%;
+}
+
+.carbon-ads-wrapper #carbonads {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+.carbon-ads-wrapper .carbon-wrap {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.carbon-ads-wrapper .carbon-img img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.carbon-ads-wrapper .carbon-text {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.carbon-ads-wrapper .carbon-poweredby {
+  display: block;
+  font-size: 9px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+
+/* ─── Processing footer ──────────────────────────────────────────────────── */
+.processing-footer {
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+  opacity: 0.6;
+}
